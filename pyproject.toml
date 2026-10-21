@@ -1,0 +1,17 @@
+[project]
+name = "toughitup-v2"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Albert Barrabino", email = "albar@equinor.com" }
+]
+requires-python = ">=3.14"
+dependencies = []
+
+[project.scripts]
+toughitup-v2 = "toughitup_v2:main"
+
+[build-system]
+requires = ["uv_build>=0.12.15,<0.13.0"]
+build-backend = "uv_build"
