@@ -6,15 +6,15 @@ def read_grdecl_file(file_path):
         lines = f.readlines()
     return lines
 
-def find_keywords(file_name):
+def find_keywords(file_content):
     keywords = []
-    with open(file_name, 'r') as f:
+    with open(file_content, 'r') as f:
         for line in f:
             stripped = line.strip()
             if not stripped or stripped.startswith('--') or stripped.startswith('/'):
                 continue
             parts = stripped.split()
-            if len(parts) == 1 and parts[0].isuper() and parts[0].isalpha():
+            if len(parts) == 1 and parts[0].isupper() and parts[0].isalpha():
                 keywords.append(parts[0])
 
     return np.array(keywords)
