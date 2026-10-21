@@ -19,5 +19,5 @@ class GeoModel:
     def parse_model(self):
         reports.print_initialization()
         reports.start_report(reports.banner)
-        keywords = extractors.find_keywords(self.__file)
+        keywords = extractors.find_keywords(self.file_path)
         reports.print_keywords_report(keywords)

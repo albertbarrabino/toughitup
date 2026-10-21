@@ -2,6 +2,16 @@
 
 ================================================================================
      TOUGHITUP   C:\Appl\Repositories\toughitup_v2\tests\test_01
-     Started:    21-10-2026 15:41:00
+     Started:    21-10-2026 15:57:02
      Python:     3.14.7
 ================================================================================
+ - Keywords found: 26
+
+keywords list
+----------------------------------------
+ - ->NOECHO PINCH MAPUNITS MAPAXES GRIDUNIT SPECGRID COORDSYS COORD
+ - ->ZCORN PORO PERMX COPY MULTIPLY NOECHO PINCH MAPUNITS
+ - ->MAPAXES GRIDUNIT SPECGRID COORDSYS COORD ZCORN PORO PERMX
+ - ->COPY MULTIPLY
+
+
