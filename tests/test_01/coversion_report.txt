@@ -2,7 +2,7 @@
 
 ================================================================================
      TOUGHITUP   C:\Appl\Repositories\toughitup_v2\tests\test_01
-     Started:    22-10-2026 12:20:56
+     Started:    22-10-2026 14:27:19
      Python:     3.14.7
 ================================================================================
 Importing GRDECL...      =======================================================
@@ -25,7 +25,7 @@ Keyword GRIDUNIT imported correctly...
 
 Keyword ZCORN imported correctly.
 Keyword COORD imported correctly.
-Building Geometry...     =======================================================
+Building Geometry        =======================================================
 
 
 

@@ -32,6 +32,7 @@ class GeoModel:
 
 
     def create_geometry(self):
+        """Build active cells in Eclipse order, or all cells when ACTNUM is absent."""
 
         if "SPECGRID" in self.keywords:
             self.__specgrid = extractors.extract_data_list(self.__file, "SPECGRID")
@@ -45,10 +46,26 @@ class GeoModel:
         self.__n_cells = self.__nx * self.__ny * self.__nz
         self.__ecl_indexes = functions.get_ref_sys(self.__nx, self.__ny, self.__nz)
 
+        active_cells = np.ones(self.__n_cells, dtype=bool)
+        if "ACTNUM" in self.keywords:
+            actnum = extractors.extract_data_to_np(self.__file, "ACTNUM")
+            if actnum.size != self.__n_cells:
+                raise ValueError(
+                    f"ACTNUM must contain {self.__n_cells} values; got {actnum.size}."
+                )
+            if not np.all((actnum == 0) | (actnum == 1)):
+                raise ValueError("ACTNUM values must be 0 (inactive) or 1 (active).")
+            active_cells = actnum == 1
+        n_active_cells = int(np.count_nonzero(active_cells))
+        reports.print_in_report(
+            f" - Active cells: {n_active_cells} of {self.__n_cells}; "
+            f"excluded {self.__n_cells - n_active_cells} inactive cells.\n"
+        )
+
         self.__units = extractors.get_units(self.__file, "GRIDUNIT")
         reports.print_in_report(f" - Grid units: {self.__units}\n")
 
-        self.__zcorn = extractors.extract_data_to_np(self.__file, "ZCORN") * -1.0
+        self.__zcorn = extractors.extract_data_to_np(self.__file, "ZCORN")
         self.__coord = extractors.extract_data_to_np(self.__file, "COORD")
 
         reports.print_in_report(reports.print_chapter_report("Building Geometry"))
@@ -58,10 +75,11 @@ class GeoModel:
             self.__coord,
             self.__nx,
             self.__ny,
-            self.__ecl_indexes,
-            self.__n_cells,
+            self.__ecl_indexes[active_cells],
+            n_active_cells,
             self.__units
         )
+        self.__geometry[:, :, 2] *= -1.0
 
         reports.print_cell_structure()
         self.__cells_reshaped = self.__geometry.reshape(-1, 3)
@@ -72,14 +90,14 @@ class GeoModel:
             reports.print_in_report("Y-axis has been inverted...\n")
 
         hex_cells = []
-        for i in range(self.__n_cells):
+        for i in range(n_active_cells):
             cell_idx = self.__idx[i*8:(i+1)*8]
             hex_cells.append(cell_idx)
-        hex_cells_int = np.array(hex_cells, dtype=int)  # shape (n_cells, 8)
+        hex_cells_int = np.array(hex_cells, dtype=int).reshape(n_active_cells, 8)
 
         self.grid = pv.UnstructuredGrid(
-            np.hstack([np.full((self.__n_cells, 1), 8), hex_cells_int]),
-            np.full(self.__n_cells, pv.CellType.HEXAHEDRON),
+            np.hstack([np.full((n_active_cells, 1), 8), hex_cells_int]),
+            np.full(n_active_cells, pv.CellType.HEXAHEDRON),
             self.__unique_corners
         )
 

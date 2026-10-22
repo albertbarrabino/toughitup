@@ -66,9 +66,28 @@ def format_zcorn(zcorn_data, nx, ny, ecl_indexes):
 
 
 def get_info(pillar, corner):
+    """Interpolate corner XY positions using COORD and ZCORN in the same units."""
     pillar_indices = [0, 1, 2, 3, 0, 1, 2, 3]
-    xy = pillar[pillar_indices, :2]
+    endpoints = pillar[pillar_indices]
+    top = endpoints[:, :3]
+    bottom = endpoints[:, 3:]
+    delta_xy = bottom[:, :2] - top[:, :2]
+    delta_z = bottom[:, 2] - top[:, 2]
+    vertical = np.all(delta_xy == 0, axis=1)
+    if np.any((delta_z == 0) & ~vertical):
+        raise ValueError(
+            "Cannot interpolate a nonvertical COORD pillar with equal endpoint depths."
+        )
+
     z = corner.reshape(-1, 1)
+    fraction = np.zeros(len(endpoints), dtype=float)
+    np.divide(
+        corner - top[:, 2],
+        delta_z,
+        out=fraction,
+        where=~vertical,
+    )
+    xy = top[:, :2] + fraction[:, None] * delta_xy
     return np.hstack((xy, z))
 
     
@@ -87,4 +106,4 @@ def build_cells(zcorn_data, coord_data, nx, ny, ecl_indexes, n_cells, units):
         single_cell = get_info(pillars[i], corners[i])
         cells.append(single_cell)
         
-    return np.array(cells)
+    return np.array(cells).reshape(n_cells, 8, 3)

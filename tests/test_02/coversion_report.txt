@@ -2,25 +2,28 @@
 
 ================================================================================
      TOUGHITUP   C:\Appl\Repositories\toughitup_v2\tests\test_02
-     Started:    22-10-2026 12:33:24
+     Started:    22-10-2026 14:50:20
      Python:     3.14.7
 ================================================================================
 Importing GRDECL...      =======================================================
 
- - Keywords found: 24
+ - Keywords found: 22
 
 keywords list
 ----------------------------------------
- - ->NOECHO MAPUNITS MAPAXES GRIDUNIT SPECGRID GDORIENT COORD ZCORN
- - ->ACTNUM ECHO NOECHO ACTNUM NTG PORO PERMZ MULTZ
- - ->PERMY MULTY PERMX MULTX ECHO NOECHO FAULTS ECHO
+ - ->GRIDUNIT MAPUNITS MAPAXES PINCH SPECGRID DIMENS COORD ZCORN
+ - ->ACTNUM MULTNUM PORO PERMX PERMY PERMZ FIPNUM MULTNUM
+ - ->OPERNUM NTG MINPV PINCH EQUALS EQUALS
 
 
 Keyword SPECGRID imported correctly...
 
 
+Keyword ACTNUM imported correctly.
+ - Active cells: 749027 of 2955280; excluded 2206253 inactive cells.
+
 Keyword GRIDUNIT imported correctly...
- - Grid units: 'METRES
+ - Grid units: METRES
 
 Keyword ZCORN imported correctly.
 Keyword COORD imported correctly.

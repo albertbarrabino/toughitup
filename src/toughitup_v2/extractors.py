@@ -26,7 +26,7 @@ def find_keywords(file_content):
     keywords = []
     with open(file_content, 'r') as f:
         for line in f:
-            stripped = line.strip()
+            stripped = line.split('--', 1)[0].strip()
             if not stripped or stripped.startswith('--') or stripped.startswith('/'):
                 continue
             parts = stripped.split()
