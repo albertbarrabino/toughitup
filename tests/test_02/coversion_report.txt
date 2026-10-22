@@ -1,0 +1,45 @@
+
+
+================================================================================
+     TOUGHITUP   C:\Appl\Repositories\toughitup_v2\tests\test_02
+     Started:    22-10-2026 12:33:24
+     Python:     3.14.7
+================================================================================
+Importing GRDECL...      =======================================================
+
+ - Keywords found: 24
+
+keywords list
+----------------------------------------
+ - ->NOECHO MAPUNITS MAPAXES GRIDUNIT SPECGRID GDORIENT COORD ZCORN
+ - ->ACTNUM ECHO NOECHO ACTNUM NTG PORO PERMZ MULTZ
+ - ->PERMY MULTY PERMX MULTX ECHO NOECHO FAULTS ECHO
+
+
+Keyword SPECGRID imported correctly...
+
+
+Keyword GRIDUNIT imported correctly...
+ - Grid units: 'METRES
+
+Keyword ZCORN imported correctly.
+Keyword COORD imported correctly.
+Building Geometry        =======================================================
+
+
+
+ - Cell data has been restructured to match PyVista structure:
+
+
+                2———————————3      
+               /|          /| 
+              / |         / |
+             1——┼————————4  |      PyVista cell structure.
+             |  6--------┼--7
+             | /         | /
+             |/          |/
+             5———————————8
+
+
+ - ✅ File grid.vtk created at C:\Appl\Repositories\toughitup_v2\tests\test_02
+ - ✅ File grid.vtu created at C:\Appl\Repositories\toughitup_v2\tests\test_02

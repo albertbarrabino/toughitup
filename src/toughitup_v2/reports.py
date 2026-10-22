@@ -34,7 +34,15 @@ def print_keywords_report(keywords):
         print_in_report(" - ->" + " ".join(keywords[i:i+8]))
     print_in_report(f"\n")
 
-
+def print_summary_cells(nx, ny, nz):
+    print_in_report(f"Model summary")
+    print_in_report(f"-"*50)
+    print_in_report(f"{'Total number of cells:':<30} {nx*ny*nz:<10}")
+    print_in_report(f"{'                   NX:':<30} {nx:<10}")
+    print_in_report(f"{'                   NY:':<30} {ny:<10}")
+    print_in_report(f"{'                   NZ:':<30} {nz:<10}")
+    print_in_report(f"\n")
+    
 def print_initialization():
     print_in_report(f"\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ TOUGHITUP - Toughing you up! @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
     print_in_report(f"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  Starting Conversion  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n")
@@ -50,4 +58,23 @@ banner = f"""
      Started:    {datetime.now().strftime("%d-%m-%Y %H:%M:%S")}
      Python:     {sys.version.split()[0]}
 ================================================================================
+"""
+
+def print_cell_structure():
+    print_in_report(cell_structure)
+    
+cell_structure = f"""
+
+ - Cell data has been restructured to match PyVista structure:
+
+
+                2———————————3      
+               /|          /| 
+              / |         / |
+             1——┼————————4  |      PyVista cell structure.
+             |  6--------┼--7
+             | /         | /
+             |/          |/
+             5———————————8
+
 """
