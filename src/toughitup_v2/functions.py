@@ -5,6 +5,10 @@ import numpy as np
 
 ft_to_m = 0.3094
 md_to_sqm = 9.869233E-16
+keywords_accepted = [
+    "PERMX", "PERMY", "PERMZ", "PORO", "ACTNUM", "FIPNNUM",
+    "SATNUM", "MULTNUM", "NTG", "ZONE", 
+    ]
 
 
 # ================== Cell builder ==================
