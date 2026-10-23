@@ -1,0 +1,2 @@
+[console_scripts]
+scooby = scooby.__main__:main

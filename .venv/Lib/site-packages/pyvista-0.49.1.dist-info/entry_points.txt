@@ -1,0 +1,2 @@
+[console_scripts]
+pyvista = pyvista.__main__:main

@@ -736,7 +736,7 @@ wheels = [
 ]
 
 [[package]]
-name = "toughitup-v2"
+name = "toughitup"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
