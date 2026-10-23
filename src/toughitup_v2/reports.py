@@ -21,7 +21,7 @@ def print_wrapped(text, width = 80):
     print_in_report(wrapped_lines)
 
 def print_chapter_report(chapter):
-    return f"{chapter:<25}" + "="*55 + "\n"
+    return f"\n{chapter:<25}" + "="*55 + "\n"
 
 
 def print_keywords_report(keywords):
@@ -47,6 +47,11 @@ def print_initialization():
     print_in_report(f"\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ TOUGHITUP - Toughing you up! @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
     print_in_report(f"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  Starting Conversion  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n")
 
+def print_completion():
+    print_in_report(f"\n{block_heather_A}")
+    print_in_report(f"\nFinished at: {datetime.now().strftime('%d-%m-%Y %H:%M:%S')}\n")
+    print_in_report(f"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Conversion Completed @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n")
+    
 
 block_heather_A = "----1----*----2----*----3----*----4----*----5----*----6----*----7----*----8"
 block_heather_B = "----2----3----4----5----6----7----8----9---10---11---12---13---14---15---16"
@@ -62,7 +67,7 @@ banner = f"""
 
 def print_cell_structure():
     print_in_report(cell_structure)
-    
+
 cell_structure = f"""
 
  - Cell data has been restructured to match PyVista structure:

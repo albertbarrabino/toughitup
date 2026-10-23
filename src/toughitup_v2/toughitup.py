@@ -10,16 +10,18 @@ from . import functions
 
 
 class GeoModel:
-    def __init__(self, file_path, invert_y_axis = False):
+    def __init__(self, file_path, invert_y_axis = False, format = None):
         self.file_path = file_path
         self.invert_y_axis = invert_y_axis
+        self.__format = format
         self.script_dir = directories.MAIN_SCRIPT_DIR
         self.__file = extractors.read_grdecl_file(self.file_path)
 
     def convert_model(self):
         self.parse_model()
         self.create_geometry()
-        self.create_geometry_file()
+        self.create_geometry_file(self.__format)
+        reports.print_completion()
 
 
     def parse_model(self):
@@ -27,14 +29,14 @@ class GeoModel:
         reports.start_report(reports.banner)
         self.__title_import = reports.print_chapter_report("Importing GRDECL...")
         reports.print_in_report(self.__title_import)
-        self.keywords = extractors.find_keywords(self.file_path)
-        reports.print_keywords_report(self.keywords)
+        self.__keywords = extractors.find_keywords(self.file_path)
+        reports.print_keywords_report(self.__keywords)
 
 
     def create_geometry(self):
         """Build active cells in Eclipse order, or all cells when ACTNUM is absent."""
 
-        if "SPECGRID" in self.keywords:
+        if "SPECGRID" in self.__keywords:
             self.__specgrid = extractors.extract_data_list(self.__file, "SPECGRID")
         else:
             self.__specgrid = extractors.extract_data_list(self.__file, "DIMENS")
@@ -68,6 +70,7 @@ class GeoModel:
         self.__zcorn = extractors.extract_data_to_np(self.__file, "ZCORN")
         self.__coord = extractors.extract_data_to_np(self.__file, "COORD")
 
+        reports.print_in_report(f"\n{reports.block_heather_A}")
         reports.print_in_report(reports.print_chapter_report("Building Geometry"))
 
         self.__geometry = functions.build_cells(
@@ -101,13 +104,20 @@ class GeoModel:
             self.__unique_corners
         )
 
-    def create_geometry_file(self):
-        my_file_vtk = os.path.join(self.script_dir, "grid.vtk")
-        reports.print_in_report(f" - ✅ File grid.vtk created at {self.script_dir}")
-        self.grid.save(my_file_vtk)
+    def create_geometry_file(self, format: str | None = None):
+        """Save the selected format, or both formats for None (case-insensitive)."""
+        normalized = format.casefold() if format is not None else "none"
+        if normalized not in ("vtk", "vtu", "none"):
+            raise ValueError("Output format must be vtk, vtu, or None.")
 
-        my_file_vtu = os.path.join(self.script_dir, "grid.vtu")
-        reports.print_in_report(f" - ✅ File grid.vtu created at {self.script_dir}")
-        self.grid.save(my_file_vtu)
+        if normalized in ("vtk", "none"):
+            my_file_vtk = os.path.join(self.script_dir, "grid.vtk")
+            self.grid.save(my_file_vtk)
+            reports.print_in_report(f" - ✅ File grid.vtk created at {self.script_dir}")
+
+        if normalized in ("vtu", "none"):
+            my_file_vtu = os.path.join(self.script_dir, "grid.vtu")
+            self.grid.save(my_file_vtu)
+            reports.print_in_report(f" - ✅ File grid.vtu created at {self.script_dir}")
         
         

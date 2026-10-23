@@ -27,6 +27,14 @@ def main() -> None:
         metavar="True|False",
         help="invert the y axis (default: False)",
     )
+    parser.add_argument(
+        "-f",
+        type=str.casefold,
+        choices=("vtu", "vtk", "none"),
+        default=None,
+        metavar="vtu|vtk|None",
+        help="output format, case-insensitive (default: None saves both formats)",
+    )
     args = parser.parse_args()
 
     if Path(args.filename).name != args.filename:
@@ -40,4 +48,4 @@ def main() -> None:
 
     from .toughitup import GeoModel
 
-    GeoModel(args.filename, invert_y_axis=args.i).convert_model()
+    GeoModel(args.filename, invert_y_axis=args.i, format=args.f).convert_model()
