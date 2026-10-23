@@ -7,14 +7,14 @@ from pathlib import Path
 import numpy as np
 import pyvista as pv
 
-from toughitup_v2 import directories
+from toughitup import directories
 
 
 class ActiveCellTests(unittest.TestCase):
     def test_keyword_with_inline_comment(self):
         with tempfile.TemporaryDirectory() as directory:
             directories.set_output_directory(directory)
-            from toughitup_v2 import extractors
+            from toughitup import extractors
 
             source = Path(directory) / "keywords.grdecl"
             source.write_text("ACTNUM -- Generated : Petrel\n1 0 /\n")
@@ -22,7 +22,7 @@ class ActiveCellTests(unittest.TestCase):
 
     def convert(self, directory, actnum, activity_keyword="ACTNUM"):
         directories.set_output_directory(directory)
-        from toughitup_v2.toughitup import GeoModel
+        from toughitup.toughitup import GeoModel
 
         coord = [
             value

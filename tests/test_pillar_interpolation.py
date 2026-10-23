@@ -5,7 +5,7 @@ from pathlib import Path
 import numpy as np
 import pyvista as pv
 
-from toughitup_v2.functions import build_cells, get_info, get_ref_sys
+from toughitup.functions import build_cells, get_info, get_ref_sys
 
 
 class PillarInterpolationTests(unittest.TestCase):
@@ -60,11 +60,11 @@ class PillarInterpolationTests(unittest.TestCase):
         np.testing.assert_array_equal(cells[6:, 4:, 2], 1040.)
 
     def test_geometry_and_vtu_preserve_interpolated_positions(self):
-        from toughitup_v2 import directories
+        from toughitup import directories
 
         with tempfile.TemporaryDirectory() as directory:
             directories.set_output_directory(directory)
-            from toughitup_v2.toughitup import GeoModel
+            from toughitup.toughitup import GeoModel
 
             coord = self.pillars[[0, 1, 3, 2]].ravel()
             source = Path(directory) / "slanted.grdecl"

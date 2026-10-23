@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pyvista as pv
 
-from toughitup_v2 import directories
+from toughitup import directories
 
 
 SOURCE = """SPECGRID
@@ -84,7 +84,7 @@ class OutputFormatTests(unittest.TestCase):
             with self.subTest(format=value), tempfile.TemporaryDirectory() as directory:
                 folder = Path(directory)
                 directories.set_output_directory(folder)
-                from toughitup_v2.toughitup import GeoModel
+                from toughitup.toughitup import GeoModel
 
                 source = folder / "input.grdecl"
                 source.write_text(SOURCE, encoding="utf-8")
@@ -96,7 +96,7 @@ class OutputFormatTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             folder = Path(directory)
             directories.set_output_directory(folder)
-            from toughitup_v2.toughitup import GeoModel
+            from toughitup.toughitup import GeoModel
 
             source = folder / "input.grdecl"
             source.write_text(SOURCE, encoding="utf-8")

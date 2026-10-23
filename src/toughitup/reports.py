@@ -1,8 +1,8 @@
 from datetime import datetime
 import sys
 import textwrap
-from toughitup_v2 import directories
-from toughitup_v2.directories import MAIN_SCRIPT_DIR
+from toughitup import directories
+from toughitup.directories import MAIN_SCRIPT_DIR
 
 
 
