@@ -9,6 +9,8 @@ TOUGHITUP converts corner-point grids from GRDECL files into VTU or VTK files. I
 
 The `COPY` and `MULTIPLY` keywords are also supported.
 
+All the keywords must be contained in the same GRDECL file, include files will not be processed.
+
 ## Run TOUGHITUP
 
 Run TOUGHITUP from the directory containing your GRDECL file. Provide the filename only, not a path:
