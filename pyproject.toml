@@ -1,7 +1,7 @@
 [project]
-name = "toughitup-v2"
+name = "toughitup"
 version = "0.1.0"
-description = "Add your description here"
+description = "Convert GRDECL files to VTK and VTU"
 readme = "README.md"
 authors = [
     { name = "Albert Barrabino", email = "albar@equinor.com" }
@@ -14,8 +14,7 @@ dependencies = [
 ]
 
 [project.scripts]
-toughitup = "toughitup_v2.cli:main"
-toughitup-v2 = "toughitup_v2.cli:main"
+toughitup = "toughitup.cli:main"
 
 [build-system]
 requires = ["uv_build>=0.12.15,<0.13.0"]
