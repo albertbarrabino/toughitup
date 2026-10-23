@@ -20,7 +20,7 @@ class ActiveCellTests(unittest.TestCase):
             source.write_text("ACTNUM -- Generated : Petrel\n1 0 /\n")
             self.assertIn("ACTNUM", extractors.find_keywords(source))
 
-    def convert(self, directory, actnum):
+    def convert(self, directory, actnum, activity_keyword="ACTNUM"):
         directories.set_output_directory(directory)
         from toughitup_v2.toughitup import GeoModel
 
@@ -35,7 +35,8 @@ class ActiveCellTests(unittest.TestCase):
             "SPECGRID\n2 2 2 1 F /\nGRIDUNIT\n'METRES' /\n"
             "COORD -- Generated : Petrel\n" + " ".join(map(str, coord))
             + " /\nZCORN -- Generated : Petrel\n16*10 16*20 16*20 16*30 /\n"
-            + ("" if actnum is None else f"ACTNUM -- Generated : Petrel\n{actnum} /\n"),
+            + ("" if actnum is None else f"{activity_keyword} -- Generated : Petrel\n{actnum} /\n")
+            + "PORO\n0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 /\n",
             encoding="utf-8",
         )
         model = GeoModel(source)
@@ -52,6 +53,19 @@ class ActiveCellTests(unittest.TestCase):
                 [[1.5, 0.5, -15], [1.5, 0.5, -25]],
             )
             self.assertEqual(grid.n_points, 12)
+            np.testing.assert_allclose(grid.cell_data["PORO"], [0.2, 0.6])
+            np.testing.assert_array_equal(grid.cell_data["ACTNUM"], [1, 1])
+
+    def test_lowercase_actnum_filters_geometry_and_properties(self):
+        with tempfile.TemporaryDirectory() as directory:
+            grid = self.convert(directory, "0 1 3*0 1 2*0", "actnum")
+            self.assertEqual(grid.n_cells, 2)
+            np.testing.assert_allclose(
+                grid.cell_centers().points,
+                [[1.5, 0.5, -15], [1.5, 0.5, -25]],
+            )
+            np.testing.assert_allclose(grid.cell_data["PORO"], [0.2, 0.6])
+            np.testing.assert_array_equal(grid.cell_data["actnum"], [1, 1])
 
     def test_missing_actnum_keeps_all_cells(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -2,9 +2,10 @@
 
 ================================================================================
      TOUGHITUP   C:\Appl\Repositories\toughitup_v2\tests\test_01
-     Started:    22-10-2026 14:27:19
+     Started:    23-10-2026 09:41:39
      Python:     3.14.7
 ================================================================================
+
 Importing GRDECL...      =======================================================
 
  - Keywords found: 26
@@ -20,11 +21,16 @@ keywords list
 Keyword SPECGRID imported correctly...
 
 
+ - Active cells: 7200 of 7200; excluded 0 inactive cells.
+
 Keyword GRIDUNIT imported correctly...
  - Grid units: FEET
 
 Keyword ZCORN imported correctly.
 Keyword COORD imported correctly.
+
+----1----*----2----*----3----*----4----*----5----*----6----*----7----*----8
+
 Building Geometry        =======================================================
 
 
@@ -42,5 +48,28 @@ Building Geometry        =======================================================
              5———————————8
 
 
+Extracting data for keyword: PORO...
+Keyword PORO imported correctly.
+ - ✅ Imported correctly.
+
+Extracting data for keyword: PERMX...
+Keyword PERMX imported correctly.
+ - ✅ Imported correctly.
+
+Extracting data for keyword: PORO...
+Keyword PORO imported correctly.
+ - ✅ Imported correctly.
+
+Extracting data for keyword: PERMX...
+Keyword PERMX imported correctly.
+ - ✅ Imported correctly.
+
  - ✅ File grid.vtk created at C:\Appl\Repositories\toughitup_v2\tests\test_01
  - ✅ File grid.vtu created at C:\Appl\Repositories\toughitup_v2\tests\test_01
+
+----1----*----2----*----3----*----4----*----5----*----6----*----7----*----8
+
+Finished at: 23-10-2026 09:41:40
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Conversion Completed @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+

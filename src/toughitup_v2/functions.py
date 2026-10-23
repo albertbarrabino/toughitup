@@ -3,8 +3,9 @@ import numpy as np
 
 # =============== Conversion Factors =============== 
 
-ft_to_m = 0.3094
+ft_to_m = 0.3048
 md_to_sqm = 9.869233E-16
+
 keywords_accepted = [
     "PERMX", "PERMY", "PERMZ", "PORO", "ACTNUM", "FIPNNUM",
     "SATNUM", "MULTNUM", "NTG", "ZONE", 
@@ -103,7 +104,7 @@ def build_cells(zcorn_data, coord_data, nx, ny, ecl_indexes, n_cells, units):
     if units == 'FEET':
         pillars *= ft_to_m
         corners *= ft_to_m
-        print(" -> UNITS: Converted from feet to meters...")
+        print(" -> UNITS: Converted from feet to meters.")
 
     cells = []
     for i in range(n_cells):

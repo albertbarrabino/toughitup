@@ -20,6 +20,7 @@ class GeoModel:
     def convert_model(self):
         self.parse_model()
         self.create_geometry()
+        self.extract_data()
         self.create_geometry_file(self.__format)
         reports.print_completion()
 
@@ -34,7 +35,7 @@ class GeoModel:
 
 
     def create_geometry(self):
-        """Build active cells in Eclipse order, or all cells when ACTNUM is absent."""
+        """Build all logical cells in Eclipse order before extracting cell data."""
 
         if "SPECGRID" in self.__keywords:
             self.__specgrid = extractors.extract_data_list(self.__file, "SPECGRID")
@@ -47,22 +48,6 @@ class GeoModel:
         self.__nz = self.__specgrid[2]
         self.__n_cells = self.__nx * self.__ny * self.__nz
         self.__ecl_indexes = functions.get_ref_sys(self.__nx, self.__ny, self.__nz)
-
-        active_cells = np.ones(self.__n_cells, dtype=bool)
-        if "ACTNUM" in self.keywords:
-            actnum = extractors.extract_data_to_np(self.__file, "ACTNUM")
-            if actnum.size != self.__n_cells:
-                raise ValueError(
-                    f"ACTNUM must contain {self.__n_cells} values; got {actnum.size}."
-                )
-            if not np.all((actnum == 0) | (actnum == 1)):
-                raise ValueError("ACTNUM values must be 0 (inactive) or 1 (active).")
-            active_cells = actnum == 1
-        n_active_cells = int(np.count_nonzero(active_cells))
-        reports.print_in_report(
-            f" - Active cells: {n_active_cells} of {self.__n_cells}; "
-            f"excluded {self.__n_cells - n_active_cells} inactive cells.\n"
-        )
 
         self.__units = extractors.get_units(self.__file, "GRIDUNIT")
         reports.print_in_report(f" - Grid units: {self.__units}\n")
@@ -78,8 +63,8 @@ class GeoModel:
             self.__coord,
             self.__nx,
             self.__ny,
-            self.__ecl_indexes[active_cells],
-            n_active_cells,
+            self.__ecl_indexes,
+            self.__n_cells,
             self.__units
         )
         self.__geometry[:, :, 2] *= -1.0
@@ -93,15 +78,64 @@ class GeoModel:
             reports.print_in_report("Y-axis has been inverted...\n")
 
         hex_cells = []
-        for i in range(n_active_cells):
+        for i in range(self.__n_cells):
             cell_idx = self.__idx[i*8:(i+1)*8]
             hex_cells.append(cell_idx)
-        hex_cells_int = np.array(hex_cells, dtype=int).reshape(n_active_cells, 8)
+        hex_cells_int = np.array(hex_cells, dtype=int).reshape(self.__n_cells, 8)
 
         self.grid = pv.UnstructuredGrid(
-            np.hstack([np.full((n_active_cells, 1), 8), hex_cells_int]),
-            np.full(n_active_cells, pv.CellType.HEXAHEDRON),
+            np.hstack([np.full((self.__n_cells, 1), 8), hex_cells_int]),
+            np.full(self.__n_cells, pv.CellType.HEXAHEDRON),
             self.__unique_corners
+        )
+
+    
+    def extract_data(self):
+        """Load cell properties, then remove inactive cells and their property values."""
+
+        for keyword in self.__keywords:
+            if keyword.upper() in functions.keywords_accepted:
+                if keyword == "COPY":
+                    self.__copies = extractors.extract_pairs(self.__file, "COPY")
+                    reports.print_in_report(f"Copying {self.__copies[0]} to {self.__copies[1]}...")
+                    self.grid.cell_data[self.__copies[1]] = self.grid.cell_data[self.__copies[0]]
+                    reports.print_in_report(" - ✅ COPY applied correctly.\n")
+
+                elif keyword == "MULTIPLY":
+                    self.__multiplies = extractors.extract_pairs(self.__file, "MULTIPLY")
+                    reports.print_in_report(f"Multiplying {self.__multiplies[0]} by {self.__multiplies[1]}...")
+                    self.grid.cell_data[self.__multiplies[0]] *= float(self.__multiplies[1])
+                    reports.print_in_report(" - ✅ MULTIPLY applied correctly.\n")
+
+                else:
+                    reports.print_in_report(f"Extracting data for keyword: {keyword}...")
+                    data = extractors.extract_data_to_np(self.__file, keyword)
+                    if keyword.upper() == "ACTNUM":
+                        if data.size != self.grid.n_cells:
+                            raise ValueError(
+                                f"ACTNUM must contain {self.grid.n_cells} values; "
+                                f"got {data.size}."
+                            )
+                        if not np.all((data == 0) | (data == 1)):
+                            raise ValueError(
+                                "ACTNUM values must be 0 (inactive) or 1 (active)."
+                            )
+                    self.grid.cell_data[keyword] = data
+                    reports.print_in_report(" - ✅ Imported correctly.\n")
+
+        active_cells = np.ones(self.grid.n_cells, dtype=bool)
+        for name in self.grid.cell_data:
+            if name.casefold() == "actnum":
+                active_cells &= self.grid.cell_data[name] != 0
+
+        n_cells = self.grid.n_cells
+        if not np.all(active_cells):
+            self.grid = self.grid.extract_cells(
+                active_cells, pass_cell_ids=False, pass_point_ids=False
+            )
+        reports.print_in_report(
+            f" - Active cells: {self.grid.n_cells} of {n_cells}; "
+            f"excluded {n_cells - self.grid.n_cells} inactive cells.\n"
         )
 
     def create_geometry_file(self, format: str | None = None):

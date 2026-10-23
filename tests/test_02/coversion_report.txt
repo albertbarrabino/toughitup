@@ -2,31 +2,32 @@
 
 ================================================================================
      TOUGHITUP   C:\Appl\Repositories\toughitup_v2\tests\test_02
-     Started:    22-10-2026 14:50:20
+     Started:    23-10-2026 10:13:36
      Python:     3.14.7
 ================================================================================
+
 Importing GRDECL...      =======================================================
 
- - Keywords found: 22
+ - Keywords found: 23
 
 keywords list
 ----------------------------------------
  - ->GRIDUNIT MAPUNITS MAPAXES PINCH SPECGRID DIMENS COORD ZCORN
  - ->ACTNUM MULTNUM PORO PERMX PERMY PERMZ FIPNUM MULTNUM
- - ->OPERNUM NTG MINPV PINCH EQUALS EQUALS
+ - ->OPERNUM NTG MINPV PINCH mindz EQUALS EQUALS
 
 
 Keyword SPECGRID imported correctly...
 
-
-Keyword ACTNUM imported correctly.
- - Active cells: 749027 of 2955280; excluded 2206253 inactive cells.
 
 Keyword GRIDUNIT imported correctly...
  - Grid units: METRES
 
 Keyword ZCORN imported correctly.
 Keyword COORD imported correctly.
+
+----1----*----2----*----3----*----4----*----5----*----6----*----7----*----8
+
 Building Geometry        =======================================================
 
 
@@ -44,5 +45,46 @@ Building Geometry        =======================================================
              5———————————8
 
 
+Extracting data for keyword: ACTNUM...
+Keyword ACTNUM imported correctly.
+ - ✅ Imported correctly.
+
+Extracting data for keyword: MULTNUM...
+Keyword MULTNUM imported correctly.
+ - ✅ Imported correctly.
+
+Extracting data for keyword: PORO...
+Keyword PORO imported correctly.
+ - ✅ Imported correctly.
+
+Extracting data for keyword: PERMX...
+Keyword PERMX imported correctly.
+ - ✅ Imported correctly.
+
+Extracting data for keyword: PERMY...
+Keyword PERMY imported correctly.
+ - ✅ Imported correctly.
+
+Extracting data for keyword: PERMZ...
+Keyword PERMZ imported correctly.
+ - ✅ Imported correctly.
+
+Extracting data for keyword: MULTNUM...
+Keyword MULTNUM imported correctly.
+ - ✅ Imported correctly.
+
+Extracting data for keyword: NTG...
+Keyword NTG imported correctly.
+ - ✅ Imported correctly.
+
+ - Active cells: 749027 of 2955280; excluded 2206253 inactive cells.
+
  - ✅ File grid.vtk created at C:\Appl\Repositories\toughitup_v2\tests\test_02
  - ✅ File grid.vtu created at C:\Appl\Repositories\toughitup_v2\tests\test_02
+
+----1----*----2----*----3----*----4----*----5----*----6----*----7----*----8
+
+Finished at: 23-10-2026 10:16:01
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Conversion Completed @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+

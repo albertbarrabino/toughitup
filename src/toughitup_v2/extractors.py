@@ -30,7 +30,7 @@ def find_keywords(file_content):
             if not stripped or stripped.startswith('--') or stripped.startswith('/'):
                 continue
             parts = stripped.split()
-            if len(parts) == 1 and parts[0].isupper() and parts[0].isalpha():
+            if len(parts) == 1 and parts[0].isalpha():
                 keywords.append(parts[0])
 
     return np.array(keywords)
@@ -114,3 +114,33 @@ def extract_data_to_np(lines, keyword):
         _iter_numeric_values(extracted_data), 
         dtype=float,
     )
+
+
+def extract_pairs(lines, keyword):
+    pairs = []
+    in_block = False
+
+    for line in lines:
+        line = line.strip()
+
+        if not line:
+                continue
+
+        # Detect start of COPY/MULTIPLY block
+        if line.upper().startswith(keyword):
+            in_block = True
+            continue
+
+        if in_block:
+            # End of block detection
+            if line == "/" or line == "//":
+                break  
+
+            # Extract items
+            parts = line.split()
+            if len(parts) >= 2:
+                item_a, item_b = parts[0], parts[1]
+                if item_b != "/":
+                    pairs.append((item_a, item_b))
+
+    return pairs
